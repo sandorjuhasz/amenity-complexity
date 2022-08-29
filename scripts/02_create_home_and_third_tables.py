@@ -43,7 +43,7 @@ periods = ["2019-05",
            "2021-05"]
 
 h3_resolution = 10
-bp_h3 = pd.read_csv("data/bp_hex_prices.csv")
+bp_h3 = pd.read_csv("outputs/bp_hex_prices.csv")
 home_output = pd.DataFrame()
 third_output = pd.DataFrame()
 
@@ -99,7 +99,7 @@ for p in periods:
     third_output = pd.concat([third_output, third_df], ignore_index=True)
 
 # export
-home_output.to_csv("data/home_table_full.csv", index=False)
-third_output.to_csv("data/third_table_full.csv", index=False)
+home_output.to_csv("outputs/home_table_full.csv", index=False)
+third_output.to_csv("outputs/third_table_full.csv", index=False)
 
 print("--- %s seconds ---" % round((time.time() - start_time), 3))
