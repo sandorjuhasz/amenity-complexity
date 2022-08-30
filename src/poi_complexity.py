@@ -11,8 +11,8 @@ complexity of locations and pois in Budapest
 
 
 # parameters
-path_location_file = "../data/shape_files/kozighatarok/admin10.shp"
-path_poi_file = "../output/google_pois_2021_enriched.geojson"
+path_location_file = "../data/shape_files/neighborhoods_admin10.shp"
+path_poi_file = "../data/google_pois_2021_enriched.geojson"
 selected_cat = "category_78"
 filter_out = ["ATM", "Parking"]
 min_categories_per_location = 2

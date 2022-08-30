@@ -8,7 +8,7 @@ import pygeos
 gpd.options.use_pygeos = False
 
 # szamlalokorzet data
-szlok = gpd.read_file("data/shape_files/szlok.shp")
+szlok = gpd.read_file("data/shape_files/censustracts_szlok.shp")
 
 # szlok transformation
 crs_eov = "epsg:23700"
@@ -60,14 +60,6 @@ bp_szlok_prices["pred_price"] = bp_szlok_prices["pred_price"].fillna(
 bp_szlok_prices["full_price"] = bp_szlok_prices["full_price"].fillna(
     np.mean(bp_szlok_prices["full_price"])
 )
-
-# save as shp
-#bp_szlok_prices.to_file("outputs/bp_szlok_pred_price.shp")
-
-
-# original shape file with predicted prices
-#bp_szlok = gpd.read_file("data/shape_files/bp_szlok_pred_price.shp")
-#bp_szlok_prices = bp_szlok_prices.set_geometry("geometry")
 
 # real predicted prices
 bp_szlok_prices["pred_real_price"] = np.exp(bp_szlok_prices["pred_price"]).astype(int)
