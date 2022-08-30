@@ -7,6 +7,10 @@ from shapely.geometry import Point, Polygon
 import pygeos
 gpd.options.use_pygeos = False
 
+
+
+# part 1 - add predicted real estate prices to censustracts of Budapest
+
 # szamlalokorzet data
 szlok = gpd.read_file("data/shape_files/censustracts_szlok.shp")
 
@@ -88,3 +92,30 @@ bp_h3 = bp_h3.set_geometry("geometry_hex")
 # save the key columns
 bp_h3_price = bp_h3[["h3_polyfill", "pred_price", "price_group", "pred_real_price"]].drop_duplicates()
 bp_h3_price.to_csv("outputs/bp_hex_price.csv", index=False)
+
+
+
+# part 2 - add h3 hexagons to neighborhoods of Budapest
+
+# original shape file with predicted prices
+city_parts = gpd.read_file("data/shape_files/neighborhoods_admin10.shp")
+city_parts = city_parts.set_geometry("geometry")
+city_parts = city_parts.to_crs("epsg:4326")
+
+# fill city part polygons with h3 hexes
+h3_resolution = 10
+parts_h3 = city_parts.h3.polyfill(h3_resolution, explode=True)
+
+# drop rows with NA for h3_polyfill -- ??
+parts_h3 = parts_h3.dropna(subset=["h3_polyfill"])
+
+def add_geometry(row):
+  """create hex geometry"""
+  points = h3.h3_to_geo_boundary(row["h3_polyfill"], True)
+  return Polygon(points)
+
+parts_h3['geometry_hex'] = parts_h3.apply(add_geometry, axis=1)
+parts_h3 = parts_h3.set_geometry("geometry_hex")
+
+# save
+parts_h3.to_csv("output/neighborhoods_h3s.csv", index=False)
